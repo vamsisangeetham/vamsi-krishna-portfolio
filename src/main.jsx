@@ -39,10 +39,12 @@ const projects = [
 function useReveal() {
   useEffect(() => {
     const nodes = document.querySelectorAll('[data-reveal]');
+
     if (!('IntersectionObserver' in window)) {
       nodes.forEach(node => node.classList.add('is-visible'));
       return;
     }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -50,8 +52,21 @@ function useReveal() {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -45px 0px' });
-    nodes.forEach(node => observer.observe(node));
+    }, {
+      threshold: 0,
+      rootMargin: '0px 0px 0px 0px'
+    });
+
+    nodes.forEach(node => {
+      const rect = node.getBoundingClientRect();
+
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        node.classList.add('is-visible');
+      } else {
+        observer.observe(node);
+      }
+    });
+
     return () => observer.disconnect();
   }, []);
 }
@@ -123,7 +138,7 @@ function App() {
             <a className="scroll-cue" href="#about"><span className="scroll-cue-line" /><span>SCROLL TO EXPLORE</span><ArrowDown size={13} /></a>
           </div>
 
-          <div className="hero-visual" data-reveal>
+          <div className="hero-visual desktop-hero-visual" data-reveal>
             <div className="visual-orbit orbit-one" /><div className="visual-orbit orbit-two" />
             <div className="visual-cross cross-one">+</div><div className="visual-cross cross-two">+</div>
             <div className="hero-photo-shell">
