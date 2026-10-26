@@ -159,7 +159,7 @@ function App() {
 
                 <div className="phone-photo">
                   <img
-                    src="/images/vamsi.png"
+                    src={`${import.meta.env.BASE_URL}images/vamsi.png`}
                     alt="Vamsi Krishna"
                     className="phone-profile-image"
                   />
